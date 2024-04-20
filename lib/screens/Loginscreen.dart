@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: SvgPicture.asset(AppImages.overlay2),
                       ),
                       Align(
-                        alignment: const Alignment(-1, 0.2),
+                        alignment: const Alignment(-1, 0.25),
                         child: SvgPicture.asset(AppImages.overlay3),
                       ),
                       Align(
