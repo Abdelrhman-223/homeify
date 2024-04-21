@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:homeify/utils/dividers.dart';
 
 import '../controllers/ProductViewscreencontroller.dart';
+import '../widgets/modelviewer.dart';
 import '../widgets/bottomnavbar.dart';
 import 'ARScreen.dart';
 
@@ -73,7 +74,12 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      // Get.to(ARMeasurementScreen());
+                                      Get.to(
+                                        const FurnitureModelViewer(
+                                          modelPathForAndroid: 'assets/models/Koltuk.glb',
+                                          modelPathForIos: 'assets/models/Koltuk.usdz',
+                                        ),
+                                      );
                                     },
                                     child: Container(
                                       height: 50,
