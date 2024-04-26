@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:homeify/controllers/user_data_controller.dart';
 import 'package:homeify/screens/Homescreen.dart';
 import 'package:homeify/screens/SignUpScreen.dart';
 import 'package:homeify/utils/dividers.dart';
-
 import '../controllers/Loginscreencontroller.dart';
 import '../utils/images.dart';
-import '../widgets/bottomnavbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -21,6 +19,20 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  String loginAlert = "";
+  SharedPreferences? sharedPreferences;
+
+  getDataFromSH() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    getDataFromSH();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
           width: MediaQuery.of(context).size.width,
           color: Colors.white,
           child: SingleChildScrollView(
-            child: GetBuilder<LoginScreenController>(
-              init: LoginScreenController(),
+            child: GetBuilder<UserDataController>(
+              init: UserDataController(),
               builder: (controller) {
                 return Container(
                   height: MediaQuery.of(context).size.height,
@@ -153,7 +165,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             spaceVertical64(),
                             InkWell(
                               onTap: () {
-                                Get.to(HomeScreen());
+                                if (sharedPreferences!.containsKey("username")) {
+                                  if (sharedPreferences!.getString("username") ==
+                                          usernameController.text &&
+                                      sharedPreferences!.getString("password") ==
+                                          passwordController.text) {
+                                    controller.username = sharedPreferences!.getString("username").toString();
+                                    controller.email = sharedPreferences!.getString("email").toString();
+                                    controller.address = sharedPreferences!.getString("address").toString();
+                                    controller.phoneNumber = sharedPreferences!.getString("phoneNumber").toString();
+                                    Get.to(const HomeScreen());
+                                  }
+                                } else {
+                                  setState(() {
+                                    loginAlert = "You don't have an account, try to Sign-Up first.";
+                                  });
+                                }
                               },
                               child: Container(
                                 height: 40,
@@ -164,6 +191,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 child: const Center(
                                     child: Text("Login", style: TextStyle(color: Colors.white))),
+                              ),
+                            ),
+                            spaceVertical8(),
+                            Text(
+                              loginAlert,
+                              style: const TextStyle(
+                                color: Colors.red,
                               ),
                             ),
                             spaceVertical32(),

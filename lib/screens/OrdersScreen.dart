@@ -1,168 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:homeify/StaticJsonFiles/user_orders.dart';
 import 'package:homeify/utils/images.dart';
 
+import '../StaticJsonFiles/products.dart';
+import '../StaticJsonFiles/user_cart.dart';
 import '../controllers/Cartscreencontroller.dart';
 import '../widgets/bottomnavbar.dart';
 
 class OrdersScreen extends StatefulWidget {
-  OrdersScreen({super.key});
+  const OrdersScreen({super.key});
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  List<Widget> cartProducts = [
-    Row(
-      children: [
-        Container(
-          width: 150,
-          height: 100,
-          margin: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage(
-                AppImages.house1,
-              ),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Product Name",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              "Order Date",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              "Price",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              "Reach Date",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.green,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-    Row(
-      children: [
-        Container(
-          width: 150,
-          height: 100,
-          margin: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage(
-                AppImages.house1,
-              ),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Product Name",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              "Order Date",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              "Price",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              "Reach Date",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.green,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-    Row(
-      children: [
-        Container(
-          width: 150,
-          height: 100,
-          margin: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage(
-                AppImages.house1,
-              ),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Product Name",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              "Order Date",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              "Price",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              "Reach Date",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.green,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,8 +37,64 @@ class _OrdersScreenState extends State<OrdersScreen> {
           init: CartScreenController(),
           builder: (controller) {
             return ListView.builder(
-              itemCount: cartProducts.length,
-              itemBuilder: (context, index) => cartProducts[index],
+              itemCount: userOrders.length,
+              itemBuilder: (context, index) => Row(
+                children: [
+                  Container(
+                    width: 150,
+                    height: 100,
+                    margin: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: AssetImage(
+                          products[userOrders[index]["product_id"]]["product_image"],
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        products[userOrders[index]["product_id"]]["product_name"],
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "No.Pieces: ${userOrders[index]["pieces_number"]}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        "${products[userOrders[index]["product_id"]]["product_price"] * userOrders[index]["pieces_number"]}\$",
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        DateTime.now().toString().substring(0, 10),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.green,
+                        ),
+                      ),
+                      CircleAvatar(
+                        radius: 10,
+                        backgroundColor: Color.fromRGBO(
+                            userOrders[index]["product_color"][0],
+                            userOrders[index]["product_color"][1],
+                            userOrders[index]["product_color"][2],
+                            1),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
           },
         ),

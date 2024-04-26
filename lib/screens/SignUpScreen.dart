@@ -5,8 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:homeify/screens/Homescreen.dart';
 import 'package:homeify/utils/dividers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/Loginscreencontroller.dart';
+import '../controllers/user_data_controller.dart';
 import '../utils/images.dart';
 import '../widgets/bottomnavbar.dart';
 
@@ -18,12 +20,25 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+
+  String signUpAlert = '';
+  SharedPreferences? sharedPreferences;
+
+  getDataFromSH() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    getDataFromSH();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +48,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           width: MediaQuery.of(context).size.width,
           color: Colors.white,
           child: SingleChildScrollView(
-            child: GetBuilder<LoginScreenController>(
-              init: LoginScreenController(),
+            child: GetBuilder<UserDataController>(
+              init: UserDataController(),
               builder: (controller) {
                 return Container(
                   height: MediaQuery.of(context).size.height,
@@ -255,7 +270,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             spaceVertical32(),
                             InkWell(
                               onTap: () {
-                                Get.to(HomeScreen());
+                                if (usernameController.text != "" &&
+                                    passwordController.text != "" &&
+                                    emailController.text != "" &&
+                                    phoneNumberController.text != "" &&
+                                    addressController.text != "") {
+                                  sharedPreferences!.setString("username", usernameController.text);
+                                  sharedPreferences!.setString("password", passwordController.text);
+                                  sharedPreferences!.setString("email", emailController.text);
+                                  sharedPreferences!
+                                      .setString("phoneNumber", phoneNumberController.text);
+                                  sharedPreferences!.setString("address", addressController.text);
+
+                                  controller.username = sharedPreferences!.getString("username").toString();
+                                  controller.email = sharedPreferences!.getString("email").toString();
+                                  controller.address = sharedPreferences!.getString("address").toString();
+                                  controller.phoneNumber = sharedPreferences!.getString("phoneNumber").toString();
+                                  Get.to(const HomeScreen());
+                                } else {
+                                  setState(() {
+                                    signUpAlert = "You should fill fields first.";
+                                  });
+                                }
                               },
                               child: Container(
                                 height: 40,
@@ -266,6 +302,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 child: const Center(
                                     child: Text("Sign Up", style: TextStyle(color: Colors.white))),
+                              ),
+                            ),
+                            spaceVertical8(),
+                            Text(
+                              signUpAlert,
+                              style: const TextStyle(
+                                color: Colors.red,
                               ),
                             ),
                           ],

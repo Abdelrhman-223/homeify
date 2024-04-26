@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:homeify/screens/Splashscreen.dart';
 
-import 'screens/Loginscreen.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -21,6 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
