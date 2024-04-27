@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:homeify/controllers/user_data_controller.dart';
+import 'package:homeify/controllers/Loginscreencontroller.dart';
 import 'package:homeify/screens/Homescreen.dart';
 import 'package:homeify/screens/SignUpScreen.dart';
 import 'package:homeify/utils/dividers.dart';
-import '../controllers/Loginscreencontroller.dart';
+import '../main.dart';
 import '../utils/images.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -21,17 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
 
   String loginAlert = "";
-  SharedPreferences? sharedPreferences;
-
-  getDataFromSH() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-  }
-
-  @override
-  void initState() {
-    getDataFromSH();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
           width: MediaQuery.of(context).size.width,
           color: Colors.white,
           child: SingleChildScrollView(
-            child: GetBuilder<UserDataController>(
-              init: UserDataController(),
+            child: GetBuilder<LoginScreenController>(
+              init: LoginScreenController(),
               builder: (controller) {
                 return Container(
                   height: MediaQuery.of(context).size.height,
@@ -165,15 +153,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             spaceVertical64(),
                             InkWell(
                               onTap: () {
-                                if (sharedPreferences!.containsKey("username")) {
-                                  if (sharedPreferences!.getString("username") ==
+                                if (sharedPreferences.containsKey("username")) {
+                                  if (sharedPreferences.getString("username") ==
                                           usernameController.text &&
-                                      sharedPreferences!.getString("password") ==
+                                      sharedPreferences.getString("password") ==
                                           passwordController.text) {
-                                    controller.username = sharedPreferences!.getString("username").toString();
-                                    controller.email = sharedPreferences!.getString("email").toString();
-                                    controller.address = sharedPreferences!.getString("address").toString();
-                                    controller.phoneNumber = sharedPreferences!.getString("phoneNumber").toString();
+                                    sharedPreferences.setBool("loggedIn", true);
                                     Get.to(const HomeScreen());
                                   }
                                 } else {

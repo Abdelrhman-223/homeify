@@ -1,10 +1,13 @@
+/*
+* اضافة ياقي خطوات الطلب من حيث تأكيد العنوان وتحديد طريقة الدفع
+* صفحة شكر للدفع
+*
+* */
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:homeify/StaticJsonFiles/user_orders.dart';
-import 'package:homeify/utils/images.dart';
-
 import '../StaticJsonFiles/products.dart';
-import '../StaticJsonFiles/user_cart.dart';
 import '../controllers/Cartscreencontroller.dart';
 import '../widgets/bottomnavbar.dart';
 

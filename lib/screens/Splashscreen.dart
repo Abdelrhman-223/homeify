@@ -1,29 +1,32 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:homeify/screens/Homescreen.dart';
 import 'package:homeify/screens/Loginscreen.dart';
 import 'package:homeify/utils/images.dart';
-
 import '../controllers/Splashscreencontroller.dart';
-import '../widgets/bottomnavbar.dart';
+import '../main.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({super.key});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   @override
   void initState() {
-    // TODO: implement initState
     Timer(
       const Duration(seconds: 2),
       () {
-        Get.off(LoginScreen());
+        if (sharedPreferences.containsKey("loggedIn")) {
+          Get.off(sharedPreferences.getBool("loggedIn")!?const HomeScreen():LoginScreen());
+        } else {
+          Get.off(LoginScreen());
+        }
       },
     );
     super.initState();
